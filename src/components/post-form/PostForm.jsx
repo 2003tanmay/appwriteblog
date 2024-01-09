@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
 
 export default function PostForm({ post }) {
-    const { register, handleSubmit, watch, setValue, control, getValues } = useForm({
+    const { register, handleSubmit, watch, setValue, control, getValues, formState } = useForm({
         defaultValues: {
             title: post?.title || "",
             slug: post?.$id || "",
@@ -14,6 +14,7 @@ export default function PostForm({ post }) {
             status: post?.status || "active",
         },
     });
+    const { errors } = formState;
 
     const navigate = useNavigate();
     const userData = useSelector((state) => state.auth.userData);
@@ -75,17 +76,29 @@ export default function PostForm({ post }) {
                     label="Title :"
                     placeholder="Title"
                     className="mb-4"
-                    {...register("title", { required: true })}
+                    {...register("title", { 
+                        required: {
+                            value: true,
+                            message: 'Title can not be empty'
+                        } 
+                    })}
                 />
+                {errors.title?.message && <p className="text-red-600 mt-8 text-center">{errors.title.message}</p>}
                 <Input
                     label="Slug :"
                     placeholder="Slug"
                     className="mb-4"
-                    {...register("slug", { required: true })}
+                    {...register("slug", { 
+                        required: {
+                            value: true,
+                            message: 'Slug can not be empty'
+                        }
+                     })}
                     onInput={(e) => {
                         setValue("slug", slugTransform(e.currentTarget.value), { shouldValidate: true });
                     }}
                 />
+                {errors.slug?.message && <p className="text-red-600 mt-8 text-center">{errors.slug.message}</p>}
                 <RTE label="Content :" name="content" control={control} defaultValue={getValues("content")} />
             </div>
             <div className="w-1/3 px-2">
@@ -94,8 +107,14 @@ export default function PostForm({ post }) {
                     type="file"
                     className="mb-4"
                     accept="image/png, image/jpg, image/jpeg, image/gif"
-                    {...register("image", { required: !post })}
+                    {...register("image", {
+                        required: {
+                            value: !post,
+                            message: 'Featured Image can not be empty'
+                        } 
+                    })}
                 />
+                {errors.image?.message && <p className="text-red-600 mt-8 text-center">{errors.image.message}</p>}
                 {post && (
                     <div className="w-full mb-4">
                         <img
@@ -109,8 +128,14 @@ export default function PostForm({ post }) {
                     options={["active", "inactive"]}
                     label="Status"
                     className="mb-4"
-                    {...register("status", { required: true })}
+                    {...register("status", { 
+                        required: {
+                            value: true,
+                            message: 'Status can not be empty'
+                        }
+                    })}
                 />
+                {errors.status?.message && <p className="text-red-600 mt-8 text-center">{errors.status.message}</p>}
                 <Button type="submit" bgColor={post ? "bg-green-500" : "bg-blue-600"} className="w-full">
                     {post ? "Update" : "Submit"}
                 </Button>
