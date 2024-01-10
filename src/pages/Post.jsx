@@ -4,6 +4,8 @@ import appwriteService from "../appwrite/config";
 import { Button, Container } from "../components";
 import parse from "html-react-parser";
 import { useSelector } from "react-redux";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function Post() {
     const [post, setPost] = useState(null);
@@ -29,8 +31,24 @@ export default function Post() {
                 appwriteService.deleteFile(post.featuredImage);
                 navigate("/");
             }
+            else {
+                errorNotify("Post delation failed.");
+            }
         });
     };
+
+    function errorNotify(err) {
+        toast.error(err, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            });
+      }
 
     return post ? (
         <div className="py-8">

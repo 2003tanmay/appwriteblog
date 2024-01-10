@@ -1,9 +1,11 @@
-import React, { useCallback, useState } from "react";
+import React, { useCallback } from "react";
 import { useForm } from "react-hook-form";
 import { Button, Input, RTE, Select } from "..";
 import appwriteService from "../../appwrite/config";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 export default function PostForm({ post }) {
     const { register, handleSubmit, watch, setValue, control, getValues, formState } = useForm({
@@ -15,12 +17,10 @@ export default function PostForm({ post }) {
         },
     });
     const { errors } = formState;
-    const [error, seterror] = useState("");
     const navigate = useNavigate();
     const userData = useSelector((state) => state.auth.userData);
 
     const submit = async (data) => {
-        seterror("");
         if (post) {
             const file = data.image[0] ? await appwriteService.uploadFile(data.image[0]) : null;
             if (file) {
@@ -35,7 +35,7 @@ export default function PostForm({ post }) {
                     await appwriteService.deleteFile(file.$id);
                 }
             } else {
-                seterror("Post updation failed.")
+                errorNotify("Post updation failed.");
             }
         } else {
             const file = await appwriteService.uploadFile(data.image[0]);
@@ -47,13 +47,26 @@ export default function PostForm({ post }) {
                     navigate(`/post/${dbPost.$id}`);
                 } else {
                     await appwriteService.deleteFile(file.$id);
-                    seterror("slug already present, try diffrent slug value.")
+                    errorNotify("slug already present, use diffrent slug value.");
                 }
             } else {
-                seterror("Post creation failed.")
+                errorNotify("Post creation failed.");
             }
         }
     };
+
+    function errorNotify(err) {
+        toast.error(err, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            });
+      }
 
     const slugTransform = useCallback((value) => {
         if (value && typeof value === "string")
@@ -88,8 +101,6 @@ export default function PostForm({ post }) {
     // };
 
     return (
-        <>
-            {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
             <form onSubmit={handleSubmit(submit)} className="flex flex-wrap">
                 <div className="w-2/3 px-2">
                     <Input
@@ -164,6 +175,5 @@ export default function PostForm({ post }) {
                     </Button>
                 </div>
             </form>
-        </>
     );
 }

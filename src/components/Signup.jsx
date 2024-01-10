@@ -5,6 +5,8 @@ import { login } from '../store/authSlice'
 import { Button, Input, Logo } from './index.js'
 import { useDispatch } from 'react-redux'
 import { useForm } from 'react-hook-form'
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Signup = () => {
     const navigate = useNavigate()
@@ -23,9 +25,24 @@ const Signup = () => {
                 navigate("/")
             }
         } catch (error) {
+            errorNotify("Sign-up Failed");
             seterror(error.message)
         }
     }
+
+    function errorNotify(err) {
+        toast.error(err, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            });
+      }
+
     return (
         <div className="flex items-center justify-center">
             <div className={`mx-auto w-full max-w-lg bg-gray-100 rounded-xl p-10 border border-black/10`}>
@@ -45,7 +62,6 @@ const Signup = () => {
                     </Link>
                 </p>
                 {error && <p className="text-red-600 mt-8 text-center">{error}</p>}
-
                 <form onSubmit={handleSubmit(create)}>
                     <div className='space-y-5'>
                         <Input
