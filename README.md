@@ -139,7 +139,7 @@ cd my-project
 
 Install dependencies
 
-### :test_tube: Install Tailwind CSS with Next.js
+### :test_tube: Install Tailwind CSS
 
 #### Install Tailwind CSS
 
@@ -186,7 +186,7 @@ Add the `@tailwind` directives for each of Tailwind’s layers to your `./src/in
 
 Install dependencies
 
-<a href="https://github.com/SashenJayathilaka/Airbnb-Build/blob/master/package.json" target="_blank">🔶 Dependency Info</a>
+<a href="https://github.com/2003tanmay/appwriteblog/blob/main/package.json" target="_blank">🔶 Dependency Info</a>
 
 <!-- Run Locally -->
 
