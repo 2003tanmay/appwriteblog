@@ -9,11 +9,12 @@ import { useForm } from "react-hook-form"
 const Login = () => {
     const navigate = useNavigate()
     const dispatch = useDispatch()
-    const { register, handleSubmit } = useForm()
-    const [error, setError] = useState("")
+    const { register, handleSubmit, formState } = useForm()
+    const { errors } = formState;
+    const [error, seterror] = useState("")
 
     const login = async (data) => {
-        setError("")
+        seterror("")
         try {
             const session = await authService.login(data)
             if (session) {
@@ -24,7 +25,7 @@ const Login = () => {
                 navigate("/")
             }
         } catch (error) {
-            setError(error.message)
+            seterror(error.message)
         }
     }
 
@@ -54,21 +55,31 @@ const Login = () => {
                             placeholder="Enter your email"
                             type="email"
                             {...register("email", {
-                                required: true,
-                                validate: {
-                                    matchPatern: (value) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-                                    "Email address must be a valid address",
+                                required: {
+                                    value: true,
+                                    message: 'Email can not be empty'
+                                },
+                                pattern: {
+                                    value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                                    message: 'Email should be valid'
                                 }
                             })}
                         />
+                        {errors.email?.message && <p className="text-red-600 mt-8 text-center">{errors.email.message}</p>}
+
                         <Input
                             label="Password: "
                             type="password"
                             placeholder="Enter your password"
                             {...register("password", {
-                                required: true,
+                                required: {
+                                    value: true,
+                                    message: 'Password can not be empty'
+                                }
                             })}
                         />
+                        {errors.password?.message && <p className="text-red-600 mt-8 text-center">{errors.password.message}</p>}
+
                         <Button
                             type="submit"
                             className="w-full"
