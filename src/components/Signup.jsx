@@ -8,12 +8,13 @@ import { useForm } from 'react-hook-form'
 
 const Signup = () => {
     const navigate = useNavigate()
-    const [error, setError] = useState("")
+    const [error, seterror] = useState("")
     const dispatch = useDispatch()
-    const { register, handleSubmit } = useForm()
+    const { register, handleSubmit, formState } = useForm()
+    const { errors } = formState;
 
     const create = async (data) => {
-        setError("")
+        seterror("")
         try {
             const userData = await authService.createAccount(data)
             if (userData) {
@@ -22,7 +23,7 @@ const Signup = () => {
                 navigate("/")
             }
         } catch (error) {
-            setError(error.message)
+            seterror(error.message)
         }
     }
     return (
@@ -51,33 +52,45 @@ const Signup = () => {
                             label="Full Name: "
                             placeholder="Enter your full name"
                             {...register("name", {
-                                required: true,
+                                required: {
+                                    value: true,
+                                    message: 'Full Name can not be empty'
+                                }
                             })}
                         />
+                        {errors.name?.message && <p className="text-red-600 mt-8 text-center">{errors.name.message}</p>}
                         <Input
                             label="Email: "
                             placeholder="Enter your email"
                             type="email"
                             {...register("email", {
-                                required: true,
-                                validate: {
-                                    matchPatern: (value) => /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(value) ||
-                                    "Email address must be a valid address",
+                                required: {
+                                    value: true,
+                                    message: 'Email can not be empty'
+                                },
+                                pattern: {
+                                    value: /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/,
+                                    message: 'Email should be valid'
                                 }
                             })}
                         />
+                        {errors.email?.message && <p className="text-red-600 mt-8 text-center">{errors.email.message}</p>}
                         <Input
                             label="Password: "
                             type="password"
                             placeholder="Enter your password"
                             {...register("password", {
-                                required: true,
-                                validate: {
-                                    matchPatern: (value) => /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/.test(value) ||
-                                        "Password must contain <br> - at least 8 characters <br> - must contain at least 1 uppercase letter, 1 lowercase letter, and 1 number <br> - Can contain special characters"
-                                }
+                                required: {
+                                    value: true,
+                                    message: 'Password can not be empty'
+                                },
+                                pattern: {
+                                    value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[a-zA-Z]).{8,}$/,
+                                    message: 'Password must - at least 8 characters, 1 uppercase letter, 1 lowercase letter and 1 number'
+                                },
                             })}
                         />
+                        {errors.password?.message && <p className="text-red-600 mt-8 text-center">{errors.password.message}</p>}
                         <Button type="submit" className="w-full">
                             Create Account
                         </Button>
