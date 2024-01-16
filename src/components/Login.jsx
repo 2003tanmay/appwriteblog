@@ -5,6 +5,8 @@ import { Button, Input, Logo } from './index'
 import { useDispatch } from "react-redux"
 import authService from "../appwrite/auth"
 import { useForm } from "react-hook-form"
+import { toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const Login = () => {
     const navigate = useNavigate()
@@ -26,8 +28,22 @@ const Login = () => {
             }
         } catch (error) {
             seterror(error.message)
+            errorNotify("Login Failed");
         }
     }
+
+    function errorNotify(err) {
+        toast.error(err, {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: false,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true,
+            progress: undefined,
+            theme: "dark",
+            });
+      }
 
     return (
         <div className='flex items-center justify-center w-full'>
