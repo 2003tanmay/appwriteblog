@@ -47,11 +47,12 @@ Full Stack Blog Website made with Vite+React, Appwrite, Tailwind-css, Redux-tool
 ## Features
 
 - Login and Sign-up function
-- Can see all post of any writer
-- Can see your posts
 - Can create new posts
 - Can update your posts
-- Can delete your posts 
+- Can delete your posts
+- Can made active or inactive your post
+- Can see all active post of any writer
+- Can see your posts
 
 ### :space_invader: Tech Stack
 
