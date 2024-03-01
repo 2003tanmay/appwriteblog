@@ -42,6 +42,10 @@ Full Stack Blog Website made with Vite+React, Appwrite, Tailwind-css, Redux-tool
 - [Contact](#handshake-contact)
 
 ## :star2: About the Project
+- Blog Application
+
+This project is a CRUD (Create, Read, Update, Delete) blog website developed using React.js, Redux-Toolkit, TailwindCSS, react-hook-form, and Appwrite. It provides users with the ability to create, read, update, and delete blogs, along with advanced features such as user authentication, rich multimedia content support, and blog privacy settings.
+
 ### <a href="https://appwriteblog-ashy.vercel.app" target="_blank">LIVE DEMO 💥</a>
 
 ## Features
